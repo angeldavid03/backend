@@ -10,13 +10,15 @@ class Empleado extends Model
 {
     use HasFactory;
 
-    protected $table = 'empleados'; // Nombre de la tabla de base de datos
+    protected $table ='empleados';
 
-    protected $primaryKey = 'codigo_empleado'; // Clave primaria de la tabla
+    protected $primarykey = 'id';
 
-    public $incrementing = false; // Indica que la clave primaria no es autoincremental
+    public $incrementing = true;
 
-    protected $keyType = 'string'; // Tipo de dato de la clave primaria
+  
+
+    protected $keytype = 'int';
 
     protected $fillable = [
         'codigo_empleado',
@@ -27,19 +29,19 @@ class Empleado extends Model
         'informacion_contacto',
         'genero',
         'id_puesto_trabajo',
-        'foto',
         
-    ];
+       ];
+
+       
+
 
     protected $dates = [
-        'fecha_nacimiento',
-        'created_at',
-        'updated_at'
+     'fecha_nacimiento',
+     'created_at',
+     'updated_at'
     ];
 
-    // Relación con el modelo PuestoTrabajo
-    public function puestoTrabajo()
-    {
-        return $this->belongsTo(PuestoTrabajo::class, 'id_puesto_trabajo', 'id');
+    public function puestotrabajo(){
+        return $this->belongsTo(puestotrabajo::class,'id_puesto_trabajo');
     }
 }

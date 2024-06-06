@@ -1,11 +1,11 @@
 <?php
 
-
-//use Illuminate\Http\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\EmpleadosController;
-
+use App\Http\Controllers\empleadoscontroller;
+use App\Http\Controllers\admincontroller;
+use Illuminate\Contracts\Cache\Store;
+use KitLoong\MigrationsGenerator\Schema\Models\Index;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,12 +18,21 @@ use App\Http\Controllers\EmpleadosController;
 |
 */
 
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-  //return $request->user();
-//});
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
 
-Route::get('/validarConexion', [AuthController::class, 'validarConexion']);
+//admins
+Route::get('/admins',[admincontroller::class,'index']);
+Route::get('/admins/{id}',[admincontroller::class,'show']);
+Route::post('/admins',[admincontroller::class,'store']);
+Route::put('/admins/{id}',[admincontroller::class,'update']);
+Route::delete('/admins/{id}',[admincontroller::class,'destroy']);
 
-Route::post('/guardar', [EmpleadosController::class, 'guardar']);
 
-
+//empleados
+Route::get('/empleados',[empleadoscontroller::class, 'index']);
+Route::get('/empleados/{id}',[empleadoscontroller::class, 'show']);
+Route::post('/empleados',[empleadoscontroller::class, 'store']);
+Route::put('/empleados/{id}',[empleadoscontroller::class, 'update']);
+Route::delete('/empleados/{id}',[empleadoscontroller::class, 'destroy']);

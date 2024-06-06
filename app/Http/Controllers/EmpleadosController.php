@@ -3,49 +3,118 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\empleado; 
 
+use App\Models\Empleado;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
-class EmpleadosController extends Controller
+class empleadoscontroller extends Controller
 {
-    public function guardar(Request $request)
+    public function index()
     {
-        $request->validate([
-            'codigo_empleado' => 'string|max:15|unique:empleados',
-            'nombre' => 'string|max:50',
-            'apellido' => 'string|max:50',
-            'direccion' => 'string',
-            'fecha_nacimiento' => 'date',
-            'informacion_contacto' => 'string|max:100',
-            'genero' => 'in:Masculino,Femenino,Otro',
-            'id_puesto_trabajo' => 'exists:puestos_trabajo,id',
-            
+        $empleados = Empleado::with('PuestoTrabajo')->get();
+         
+        if ($empleados->isEmpty()) {
+            return response()->json([
+                'message' => 'No hay empleados registrados'
+            ], 404);
+        }
+
+        return response()->json($empleados);
+    }
+
+     public function show($id)
+          {
+            $empleado = Empleado::with('puestotrabajo')->find($id);
+            if (!$empleado){
+                return response()->json(['mensaje' => 'No se encontro el empleado'], 404);
+
+            }
+            return response()->json($empleado);
+          }
+
+
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nombre' => 'required|string|max:50',
+            'apellido' => 'required|string|max:50',
+            'direccion' => 'required|string|max:255',
+            'fecha_nacimiento' => 'required|date',
+            'informacion_contacto' => 'required|unique:empleados|string|max:100',
+            'genero' => 'required|in:Masculino,Femenino,Otro',
+            'id_puesto_trabajo' => 'required|exists:puestos_trabajo,id',
+            'foto' => 'nullable|image|max:2048',
         ]);
-       
 
-        // Crear un nuevo empleado
-        $empleado = new empleado();
-        $empleado->codigo_empleado = $request->codigo_empleado;
-        $empleado->nombre = $request->nombre;
-        $empleado->apellido = $request->apellido;
-        $empleado->direccion = $request->direccion;
-        $empleado->fecha_nacimiento = $request->fecha_nacimiento;
-        $empleado->informacion_contacto = $request->informacion_contacto;
-        $empleado->genero = $request->genero;
-        $empleado->id_puesto_trabajo = $request->id_puesto_trabajo;
-       
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
 
-        
-        
+        $codigo_empleado = $this->generateCodigoEmpleado();
 
-        //aqui lo guardo en la base de datos
-        $empleado->save();
-       
+        $empleado = Empleado::create(array_merge(
+            $request->all(),
+            ['codigo_empleado' => $codigo_empleado]
+        ));
 
-        //mensaje de exito 
-        return response()->json([
-            'message' => 'Empleado creado correctamente',
-            'empleado' => $empleado
-        ], 201);
+        return response()->json($empleado, 201);
+    }
+
+    private function generateCodigoEmpleado()
+    {
+        $letras = Str::upper(Str::random(2));
+        $numeros = rand(10, 99);
+        return $letras . $numeros;
+    }
+
+    public function validateCodigo(Request $request)
+    {
+        $codigo_empleado = $request->input('codigo_empleado');
+
+        $empleado = Empleado::where('codigo_empleado', $codigo_empleado)->first();
+        if ($empleado) {
+            return response()->json(['message' => 'Empleado registrado con éxito', 'success' => true, 'empleado' => $empleado]);
+        } else {
+            return response()->json(['message' => 'Código de empleado no encontrado', 'success' => false], 404);
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $empleado = Empleado::find($id);
+        if (!$empleado) {
+            return response()->json(['mensaje' => 'No se encontró el empleado'], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            
+            'nombre' => 'required|string|max:50',
+            'apellido' => 'required|string|max:50',
+            'direccion' => 'required|string|max:255',
+            'fecha_nacimiento' => 'required|date',
+            'informacion_contacto' => 'required|string|max:100',
+            'genero' => 'required|in:Masculino,Femenino,Otro',
+            'id_puesto_trabajo' => 'required|exists:puestos_trabajo,id',
+            'foto' => 'nullable|image|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $empleado->update($request->all());
+        return response()->json($empleado);
+    }
+
+    public function destroy($id)
+    {
+        $empleado = Empleado::find($id);
+        if (!$empleado) {
+            return response()->json(['mensaje' => 'No se encontro el empleado'], 404);
+        }
+        $empleado->delete();
+        return response()->json(['message' => 'Empleado exterminado, volvere!']);
     }
 }
