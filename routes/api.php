@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\empleadoscontroller;
 use App\Http\Controllers\admincontroller;
-use Illuminate\Contracts\Cache\Store;
+
 use KitLoong\MigrationsGenerator\Schema\Models\Index;
 
 /*

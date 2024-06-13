@@ -9,8 +9,30 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
+use Yajra\DataTables\Facades\DataTables;
+
 class empleadoscontroller extends Controller
 {
+
+        public function getDataTables(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Empleado::with('puestoTrabajo')->get();
+            return DataTables::of($data)
+                ->addColumn('acciones', function($row) {
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editEmpleado">Editar</a>';
+                    $btn .= ' <a href="javascript:void(0)" data-toggle="tooltip" data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteEmpleado">Eliminar</a>';
+                    return $btn;
+                })
+                ->rawColumns(['acciones'])
+                ->make(true);
+        }
+    }
+    
+
+
+
+
     public function index()
     {
         $empleados = Empleado::with('PuestoTrabajo')->get();
@@ -21,7 +43,9 @@ class empleadoscontroller extends Controller
             ], 404);
         }
 
-        return response()->json($empleados);
+        
+           $empleados = Empleado::all();
+           return view('admin.empleados', compact('empleados'));
     }
 
      public function show($id)
@@ -59,8 +83,12 @@ class empleadoscontroller extends Controller
             ['codigo_empleado' => $codigo_empleado]
         ));
 
+        
+
         return response()->json($empleado, 201);
     }
+
+    
 
     private function generateCodigoEmpleado()
     {
@@ -103,6 +131,7 @@ class empleadoscontroller extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
+       
 
         $empleado->update($request->all());
         return response()->json($empleado);
@@ -116,5 +145,6 @@ class empleadoscontroller extends Controller
         }
         $empleado->delete();
         return response()->json(['message' => 'Empleado exterminado, volvere!']);
+        
     }
 }

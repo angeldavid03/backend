@@ -263,7 +263,7 @@ return [
     'register_url' => 'register',
     'password_reset_url' => 'password/reset',
     'password_email_url' => 'password/email',
-    'profile_url' => false,
+    'profile_url' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -323,13 +323,20 @@ return [
             'label_color' => 'success',
         ],
         ['header' => 'account_settings'],
+
         [
-            'text' => 'profile',
-            'url' => 'admin/settings',
+            'text' => 'Administradores',
+            'url' => 'admin/admin',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
-            'text' => 'change_password',
+            'text' => 'Empleados',
+            'url' => 'admin/empleados',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        
+        [
+            'text' => 'Registro Acceso',
             'url' => 'admin/settings',
             'icon' => 'fas fa-fw fa-lock',
         ],
@@ -425,22 +432,22 @@ return [
 
     'plugins' => [
         'Datatables' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js',
+                    'location' => '//cdn.datatables.net/2.0.8/js/jquery.dataTables.min.js',
                 ],
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js',
+                    'location' => '//cdn.datatables.net/2.0.8/js/dataTables.min.js',
                 ],
                 [
                     'type' => 'css',
                     'asset' => false,
-                    'location' => '//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css',
+                    'location' => '//cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css',
                 ],
             ],
         ],

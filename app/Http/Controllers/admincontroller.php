@@ -19,6 +19,7 @@ class admincontroller extends Controller
             ], 404);
         }
         return response()->json($admins);
+        return view('admin.admin.admin', compact('admin'));
     }
 
     public function show($id)
