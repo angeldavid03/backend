@@ -12,17 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('empleados', function (Blueprint $table) {
-            $table->foreign('nombre_puesto_trabajo')->references('nombre')->on('puestos_trabajo')->onUpdate('no action')->onDelete('no action');
+            $table->foreign('id_jornadas')->references(['id'])->on('jornadas')->onUpdate('no action')->onDelete('no action');
         });
     }
 
     /**
-     * Reverse the migrations.
+     * Reverse the migrations. 
      */
     public function down(): void
     {
         Schema::table('empleados', function (Blueprint $table) {
-            $table->dropForeign(['nombre_puesto_trabajo']);
+            $table->dropForeign('id_jornadas');
         });
     }
 };

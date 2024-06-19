@@ -3,61 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Models\Empleado;
+use App\Models\PuestoTrabajo;
+use App\Models\Jornadas;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-use Yajra\DataTables\Facades\DataTables;
-
-class empleadoscontroller extends Controller
+class EmpleadosController extends Controller
 {
-
-        public function getDataTables(Request $request)
-    {
-        if ($request->ajax()) {
-            $data = Empleado::with('puestoTrabajo')->get();
-            return DataTables::of($data)
-                ->addColumn('acciones', function($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editEmpleado">Editar</a>';
-                    $btn .= ' <a href="javascript:void(0)" data-toggle="tooltip" data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteEmpleado">Eliminar</a>';
-                    return $btn;
-                })
-                ->rawColumns(['acciones'])
-                ->make(true);
-        }
-    }
-    
-
-
-
-
     public function index()
     {
-        $empleados = Empleado::with('PuestoTrabajo')->get();
-         
-        if ($empleados->isEmpty()) {
-            return response()->json([
-                'message' => 'No hay empleados registrados'
-            ], 404);
-        }
-
-        
-           $empleados = Empleado::all();
-           return view('admin.empleados', compact('empleados'));
+        $empleados = Empleado::with('puestoTrabajo', 'jornadas')->get();
+        $puestos = PuestoTrabajo::all();
+        $jornadas = Jornadas::all();
+        return view('admin.empleados', compact('empleados', 'puestos', 'jornadas'));
     }
 
-     public function show($id)
-          {
-            $empleado = Empleado::with('puestotrabajo')->find($id);
-            if (!$empleado){
-                return response()->json(['mensaje' => 'No se encontro el empleado'], 404);
-
-            }
-            return response()->json($empleado);
-          }
-
+    public function show($id)
+    {
+        $empleado = Empleado::with('puestoTrabajo')->find($id);
+        if (!$empleado) {
+            return response()->json(['mensaje' => 'No se encontró el empleado'], 404);
+        }
+        return response()->json($empleado);
+    }
 
     public function store(Request $request)
     {
@@ -68,8 +38,9 @@ class empleadoscontroller extends Controller
             'fecha_nacimiento' => 'required|date',
             'informacion_contacto' => 'required|unique:empleados|string|max:100',
             'genero' => 'required|in:Masculino,Femenino,Otro',
-            'id_puesto_trabajo' => 'required|exists:puestos_trabajo,id',
-            'foto' => 'nullable|image|max:2048',
+            'nombre_puesto_trabajo' => 'required|exists:puesto_trabajos,nombre',
+            'id_jornadas' => 'required|exists:jornadas,id',
+            'foto' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -77,18 +48,16 @@ class empleadoscontroller extends Controller
         }
 
         $codigo_empleado = $this->generateCodigoEmpleado();
+        $data = $request->all();
+        $data['codigo_empleado'] = $codigo_empleado;
 
-        $empleado = Empleado::create(array_merge(
-            $request->all(),
-            ['codigo_empleado' => $codigo_empleado]
-        ));
+        if ($request->hasFile('foto')) {
+            $data['foto'] = $request->file('foto')->store('fotos', 'public');
+        }
 
-        
-
-        return response()->json($empleado, 201);
+        Empleado::updateOrCreate(['id' => $request->empleado_id], $data);
+        return response()->json(['success' => 'Empleado guardado exitosamente.']);
     }
-
-    
 
     private function generateCodigoEmpleado()
     {
@@ -100,8 +69,8 @@ class empleadoscontroller extends Controller
     public function validateCodigo(Request $request)
     {
         $codigo_empleado = $request->input('codigo_empleado');
-
         $empleado = Empleado::where('codigo_empleado', $codigo_empleado)->first();
+
         if ($empleado) {
             return response()->json(['message' => 'Empleado registrado con éxito', 'success' => true, 'empleado' => $empleado]);
         } else {
@@ -117,34 +86,46 @@ class empleadoscontroller extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            
             'nombre' => 'required|string|max:50',
             'apellido' => 'required|string|max:50',
             'direccion' => 'required|string|max:255',
             'fecha_nacimiento' => 'required|date',
-            'informacion_contacto' => 'required|string|max:100',
+            'informacion_contacto' => 'required|string|max:100|unique:empleados,informacion_contacto,' . $empleado->id,
             'genero' => 'required|in:Masculino,Femenino,Otro',
-            'id_puesto_trabajo' => 'required|exists:puestos_trabajo,id',
-            'foto' => 'nullable|image|max:2048',
+            'nombre_puesto_trabajo' => 'required|exists:puesto_trabajos,nombre',
+            'id_jornadas' => 'required|exists:jornadas,id',
+            'foto' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-       
 
-        $empleado->update($request->all());
-        return response()->json($empleado);
+        $data = $request->all();
+
+        if ($request->hasFile('foto')) {
+            if ($empleado->foto) {
+                Storage::delete('public/' . $empleado->foto);
+            }
+            $data['foto'] = $request->file('foto')->store('fotos', 'public');
+        }
+
+        $empleado->update($data);
+        return response()->json(['success' => 'Empleado actualizado exitosamente.']);
     }
 
     public function destroy($id)
     {
         $empleado = Empleado::find($id);
         if (!$empleado) {
-            return response()->json(['mensaje' => 'No se encontro el empleado'], 404);
+            return response()->json(['mensaje' => 'No se encontró el empleado'], 404);
         }
+
+        if ($empleado->foto) {
+            Storage::delete('public/' . $empleado->foto);
+        }
+
         $empleado->delete();
-        return response()->json(['message' => 'Empleado exterminado, volvere!']);
-        
+        return response()->json(['message' => 'Empleado eliminado correctamente']);
     }
 }

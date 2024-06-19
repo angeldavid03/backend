@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('puestos_trabajo', function (Blueprint $table) {
             $table->integer('id', true);
-            $table->string('nombre', 150);
+            $table->string('nombre', 100)->unique();
             
         });
     }
 
-    /**
+    /** 
      * Reverse the migrations.
      */
     public function down(): void

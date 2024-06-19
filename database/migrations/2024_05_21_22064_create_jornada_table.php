@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('empleados', function (Blueprint $table) {
-            $table->foreign('nombre_puesto_trabajo')->references('nombre')->on('puestos_trabajo')->onUpdate('no action')->onDelete('no action');
+        Schema::create('jornadas', function (Blueprint $table) {
+            $table->integer('id', true);
+            $table->time('entrada');
+            $table->time('salida');
+           
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('empleados', function (Blueprint $table) {
-            $table->dropForeign(['nombre_puesto_trabajo']);
-        });
+        Schema::dropIfExists('jornadas');
     }
 };

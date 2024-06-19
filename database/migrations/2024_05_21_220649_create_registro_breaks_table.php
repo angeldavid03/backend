@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('registro_breaks', function (Blueprint $table) {
             $table->integer('id', true);
-            $table->string('cd_empleado',15)->index('cd_empleado');
+            $table->string('nombre_emp',15)->index('nombre_emp');
             $table->date('fecha');
             $table->time('salida_break1');
             $table->time('entrada_break1');

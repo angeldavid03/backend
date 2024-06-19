@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\empleadoscontroller;
+use App\Http\Controllers\empleadosController;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\admincontroller;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,24 +20,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-
-
 Auth::routes();
-
-
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::prefix('admin')->group(function () {
-    Route::get('empleados', [EmpleadosController::class, 'index'])->name('empleados.index');
-    Route::get('empleados/datatables', [EmpleadosController::class, 'getDataTables'])->name('empleados.datatables');
-    Route::post('empleados/store', [EmpleadosController::class, 'store'])->name('empleados.store');
-    Route::get('empleados/{id}/show', [EmpleadosController::class, 'show'])->name('empleados.show');
-    Route::put('empleados/update/{id}', [EmpleadosController::class, 'update'])->name('empleados.update');
-    Route::delete('empleados/destroy/{id}', [EmpleadosController::class, 'destroy'])->name('empleados.destroy');
+    Route::get('/empleados', [empleadosController::class, 'index'])->name('empleados.index');
+    Route::post('/empleados', [empleadosController::class, 'store'])->name('empleados.store');
+    Route::get('empleados/{id}/show', [empleadosController::class, 'show'])->name('empleados.show');
+    Route::get('/empleados/{id}/update', [empleadosController::class, 'update'])->name('empleados.update');
+    Route::delete('/empleados/{id}/destroy', [empleadosController::class, 'destroy'])->name('empleados.destroy');
 });
 
-//admins
-Route::get('admins/admin', [admincontroller::class, 'index'])->name('admin.index');
-
+// Admins
+Route::get('admins/admin', [AdminController::class, 'index'])->name('admin.index');

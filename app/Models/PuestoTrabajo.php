@@ -2,24 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class puestotrabajo extends Model
+class PuestoTrabajo extends Model
 {
-    use HasFactory;
-
     protected $table = 'puestos_trabajo';
 
     protected $fillable = [
-        'id',
-        'nombre'
-        
+        'nombre',
     ];
-    public $timestamps = false;
 
+    // Relación con Empleados
     public function empleados()
     {
-        return $this->hasMany(empleado::class, 'id_puesto_trabajo', 'id');
+        return $this->hasMany(Empleado::class, 'nombre_puesto_trabajo', 'nombre');
     }
 }

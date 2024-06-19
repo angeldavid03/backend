@@ -2,23 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 
 class Empleado extends Model
 {
-    use HasFactory;
-
-    protected $table ='empleados';
-
-    protected $primarykey = 'id';
-
-    public $incrementing = true;
-
-  
-
-    protected $keytype = 'int';
+    protected $table = 'empleados';
 
     protected $fillable = [
         'codigo_empleado',
@@ -28,20 +16,20 @@ class Empleado extends Model
         'fecha_nacimiento',
         'informacion_contacto',
         'genero',
-        'id_puesto_trabajo',
-        
-       ];
-
-       
-
-
-    protected $dates = [
-     'fecha_nacimiento',
-     'created_at',
-     'updated_at'
+        'nombre_puesto_trabajo',
+        'id_jornadas',
+        'foto',
     ];
 
-    public function puestotrabajo(){
-        return $this->belongsTo(puestotrabajo::class,'id_puesto_trabajo');
+    // Relación con Puesto de Trabajo
+    public function puestoTrabajo()
+    {
+        return $this->belongsTo(PuestoTrabajo::class, 'nombre_puesto_trabajo', 'nombre');
+    }
+
+    // Relación con Jornadas
+    public function jornadas()
+    {
+        return $this->belongsTo(Jornadas::class, 'id_jornadas', 'id');
     }
 }

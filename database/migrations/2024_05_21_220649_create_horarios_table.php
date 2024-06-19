@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('horarios', function (Blueprint $table) {
             $table->integer('id', true);
-            $table->string('cod_empleado',15)->index('cod_empleado');
+            $table->string('nombre_emp',15)->index('nombre_emp');
             $table->time('hora_entrada');
             $table->time('hora_salida');
             $table->binary('foto')->nullable();
