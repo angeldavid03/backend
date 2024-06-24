@@ -15,6 +15,6 @@ class PuestoTrabajo extends Model
     // Relación con Empleados
     public function empleados()
     {
-        return $this->hasMany(Empleado::class, 'nombre_puesto_trabajo', 'nombre');
+        return $this->hasMany(Empleado::class, 'id_puesto_trabajo', 'id');
     }
 }

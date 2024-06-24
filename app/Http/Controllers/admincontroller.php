@@ -12,13 +12,13 @@ class admincontroller extends Controller
 {
     public function index()
     {
-        $admins = Admin::all();
-        if ($admins->isEmpty()) {
+        $admin = Admin::all();
+        if ($admin->isEmpty()) {
             return response()->json([
                 'message' => 'No hay admins registrados'
             ], 404);
         }
-        return response()->json($admins);
+        return response()->json($admin);
         
     }
 

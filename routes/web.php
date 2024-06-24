@@ -25,12 +25,13 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::prefix('admin')->group(function () {
-    Route::get('/empleados', [empleadosController::class, 'index'])->name('empleados.index');
-    Route::post('/empleados', [empleadosController::class, 'store'])->name('empleados.store');
-    Route::get('empleados/{id}/show', [empleadosController::class, 'show'])->name('empleados.show');
-    Route::get('/empleados/{id}/update', [empleadosController::class, 'update'])->name('empleados.update');
-    Route::delete('/empleados/{id}/destroy', [empleadosController::class, 'destroy'])->name('empleados.destroy');
+    Route::get('/empleados', [empleadosController::class, 'index'])->name('admin.empleados.index');
+    Route::get('/empleados/create', [empleadosController::class, 'create'])->name('admin.create');
+    Route::post('/empleados/store', [empleadosController::class, 'store'])->name('admin.empleados.store');
+    Route::get('empleados/{id}/show', [empleadosController::class, 'show'])->name('admin.empleados.show');
+    Route::put('/empleados/{id}/edit', [empleadosController::class, 'edit'])->name('admin.empleados.edit');
+    Route::delete('/empleados/{id}/destroy', [empleadosController::class, 'destroy'])->name('admin.empleados.destroy');
 });
 
 // Admins
-Route::get('admins/admin', [AdminController::class, 'index'])->name('admin.index');
+Route::get('admin/admin', [AdminController::class, 'index'])->name('admin.index');

@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use KitLoong\MigrationsGenerator\Schema\Models\Index;
 
 return new class extends Migration
 {
@@ -20,7 +21,7 @@ return new class extends Migration
             $table->date('fecha_nacimiento');
             $table->string('informacion_contacto', 100);
             $table->enum('genero', ['Masculino', 'Femenino', 'Otro']);
-            $table->string('nombre_puesto_trabajo');
+            $table->integer('id_puesto_trabajo')->index('id_puesto_trabajo');
             $table->integer('id_jornadas')->index('id_jornadas');
             $table->binary('foto')->nullable();
             $table->timestamp('created_at')->nullable()->useCurrent();

@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Empleado extends Model
 {
     protected $table = 'empleados';
+    public $timestamps = false;
+   
 
     protected $fillable = [
         'codigo_empleado',
@@ -16,15 +19,20 @@ class Empleado extends Model
         'fecha_nacimiento',
         'informacion_contacto',
         'genero',
-        'nombre_puesto_trabajo',
+        'id_puesto_trabajo',
         'id_jornadas',
         'foto',
+        'created_at',
     ];
+
+    
+
+
 
     // Relación con Puesto de Trabajo
     public function puestoTrabajo()
     {
-        return $this->belongsTo(PuestoTrabajo::class, 'nombre_puesto_trabajo', 'nombre');
+        return $this->belongsTo(PuestoTrabajo::class, 'id_puesto_trabajo', 'id');
     }
 
     // Relación con Jornadas

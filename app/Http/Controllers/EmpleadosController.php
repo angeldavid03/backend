@@ -9,6 +9,10 @@ use App\Models\Jornadas;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
+
+
+
 
 class EmpleadosController extends Controller
 {
@@ -29,41 +33,73 @@ class EmpleadosController extends Controller
         return response()->json($empleado);
     }
 
+    public function create()
+    {
+       
+
+        
+
+        
+        
+          $puestos = PuestoTrabajo::all();
+          $jornadas = Jornadas::all();
+
+          $jornadas = $jornadas->mapWithKeys(function ($jornada) {
+            return [$jornada->id => $jornada->entrada . ' - ' . $jornada->salida];
+
+            
+        });
+
+        $puestos = $puestos->mapWithKeys(function ($puesto) {
+            return [$puesto->id => $puesto->nombre];
+            });
+    
+
+        
+        return view('admin.create',compact('puestos', 'jornadas'));
+
+    return response()->json(['success' => 'Empleado guardado exitosamente.']);
+    }
+
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+
+        $request->validate([
             'nombre' => 'required|string|max:50',
             'apellido' => 'required|string|max:50',
             'direccion' => 'required|string|max:255',
             'fecha_nacimiento' => 'required|date',
-            'informacion_contacto' => 'required|unique:empleados|string|max:100',
+            'informacion_contacto' => 'required|string|max:100|unique:empleados,informacion_contacto',
             'genero' => 'required|in:Masculino,Femenino,Otro',
-            'nombre_puesto_trabajo' => 'required|exists:puesto_trabajos,nombre',
+            'id_puesto_trabajo' => 'required|exists:puestos_trabajo,id', 
             'id_jornadas' => 'required|exists:jornadas,id',
             'foto' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
         ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $codigo_empleado = $this->generateCodigoEmpleado();
+       
+    
         $data = $request->all();
-        $data['codigo_empleado'] = $codigo_empleado;
+        $data['codigo_empleado'] = $this->generateCodigoEmpleado();
+        $data['created_at'] = Carbon::now();
+
+        
+        
+        $empleado = Empleado::create($data);
+        
 
         if ($request->hasFile('foto')) {
             $data['foto'] = $request->file('foto')->store('fotos', 'public');
         }
 
-        Empleado::updateOrCreate(['id' => $request->empleado_id], $data);
-        return response()->json(['success' => 'Empleado guardado exitosamente.']);
+        
+    
+        return redirect()->route('admin.empleados.index', $empleado)->with('success', 'Empleado creado exitosamente.');
     }
 
     private function generateCodigoEmpleado()
     {
-        $letras = Str::upper(Str::random(2));
-        $numeros = rand(10, 99);
-        return $letras . $numeros;
+        $letters = strtoupper(substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2));
+        $numbers = substr(str_shuffle("0123456789"), 0, 2);
+        return $letters . $numbers;
     }
 
     public function validateCodigo(Request $request)
@@ -78,7 +114,7 @@ class EmpleadosController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function edit(Request $request, $id)
     {
         $empleado = Empleado::find($id);
         if (!$empleado) {
@@ -112,8 +148,13 @@ class EmpleadosController extends Controller
 
         $empleado->update($data);
         return response()->json(['success' => 'Empleado actualizado exitosamente.']);
+        return view('admin.empleados.edit',compact('empleados'));
     }
 
+    public function update(Request $request, Empleado $empleado)    
+    {
+
+    }
     public function destroy($id)
     {
         $empleado = Empleado::find($id);
