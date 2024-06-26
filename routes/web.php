@@ -29,7 +29,9 @@ Route::prefix('admin')->group(function () {
     Route::get('/empleados/create', [empleadosController::class, 'create'])->name('admin.create');
     Route::post('/empleados/store', [empleadosController::class, 'store'])->name('admin.empleados.store');
     Route::get('empleados/{id}/show', [empleadosController::class, 'show'])->name('admin.empleados.show');
-    Route::put('/empleados/{id}/edit', [empleadosController::class, 'edit'])->name('admin.empleados.edit');
+    Route::get('/empleados/{id}/edit', [empleadosController::class, 'edit'])->name('admin.edit');
+    Route::put('/empleados/{id}', [empleadosController::class, 'update'])->name('admin.empleados.update');
+    Route::get('/empleados/{id}/confirmDelete', [EmpleadosController::class, 'confirmDelete'])->name('admin.empleados.confirmDelete');
     Route::delete('/empleados/{id}/destroy', [empleadosController::class, 'destroy'])->name('admin.empleados.destroy');
 });
 

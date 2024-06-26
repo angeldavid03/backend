@@ -73,7 +73,7 @@ class EmpleadosController extends Controller
             'genero' => 'required|in:Masculino,Femenino,Otro',
             'id_puesto_trabajo' => 'required|exists:puestos_trabajo,id', 
             'id_jornadas' => 'required|exists:jornadas,id',
-            'foto' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
+            'foto' => 'required|image|mimes:jpg,png,jpeg|max:2048',
         ]);
        
     
@@ -92,7 +92,7 @@ class EmpleadosController extends Controller
 
         
     
-        return redirect()->route('admin.empleados.index', $empleado)->with('success', 'Empleado creado exitosamente.');
+        return redirect()->route('admin.empleados.index', $empleado)->with('success', 'Empleado registrado exitosamente.');
     }
 
     private function generateCodigoEmpleado()
@@ -114,45 +114,58 @@ class EmpleadosController extends Controller
         }
     }
 
-    public function edit(Request $request, $id)
+    public function edit(Empleado $empleado, $id)
+    {
+        $empleado = Empleado::find($id);
+    if (!$empleado) {
+        return response()->json(['mensaje' => 'No se encontró el empleado'], 404);
+    }
+
+    $puestos = PuestoTrabajo::all();
+    $jornadas = Jornadas::all();
+
+    $jornadas = $jornadas->mapWithKeys(function ($jornada) {
+        return [$jornada->id => $jornada->entrada . ' - ' . $jornada->salida];
+    });
+
+    $puestos = $puestos->mapWithKeys(function ($puesto) {
+        return [$puesto->id => $puesto->nombre];
+    });
+
+    return view('admin.edit', compact('empleado', 'puestos', 'jornadas'));
+    }
+
+    public function update(Empleado $empleado, Request $request, $id)    
     {
         $empleado = Empleado::find($id);
         if (!$empleado) {
-            return response()->json(['mensaje' => 'No se encontró el empleado'], 404);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'nombre' => 'required|string|max:50',
-            'apellido' => 'required|string|max:50',
-            'direccion' => 'required|string|max:255',
-            'fecha_nacimiento' => 'required|date',
-            'informacion_contacto' => 'required|string|max:100|unique:empleados,informacion_contacto,' . $empleado->id,
-            'genero' => 'required|in:Masculino,Femenino,Otro',
-            'nombre_puesto_trabajo' => 'required|exists:puesto_trabajos,nombre',
-            'id_jornadas' => 'required|exists:jornadas,id',
-            'foto' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $data = $request->all();
-
-        if ($request->hasFile('foto')) {
-            if ($empleado->foto) {
-                Storage::delete('public/' . $empleado->foto);
-            }
-            $data['foto'] = $request->file('foto')->store('fotos', 'public');
-        }
-
-        $empleado->update($data);
-        return response()->json(['success' => 'Empleado actualizado exitosamente.']);
-        return view('admin.empleados.edit',compact('empleados'));
+        return response()->json(['mensaje' => 'No se encontró el empleado'], 404);
     }
 
-    public function update(Request $request, Empleado $empleado)    
-    {
+    $request->validate([
+        'nombre' => 'required|string|max:50',
+        'apellido' => 'required|string|max:50',
+        'direccion' => 'required|string|max:255',
+        'fecha_nacimiento' => 'required|date',
+        'informacion_contacto' => 'required|string|max:100|unique:empleados,informacion_contacto,' . $empleado->id,
+        'genero' => 'required|in:Masculino,Femenino,Otro',
+        'id_puesto_trabajo' => 'required|exists:puestos_trabajo,id',
+        'id_jornadas' => 'required|exists:jornadas,id',
+        'foto' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+    ]);
+
+    $data = $request->all();
+
+    if ($request->hasFile('foto')) {
+        if ($empleado->foto) {
+            Storage::delete('public/' . $empleado->foto);
+        }
+        $data['foto'] = $request->file('foto')->store('fotos', 'public');
+    }
+
+    $empleado->update($data);
+
+    return redirect()->route('admin.empleados.index', $empleado)->with('success', 'Empleado actualizado exitosamente.');
 
     }
     public function destroy($id)
@@ -167,6 +180,16 @@ class EmpleadosController extends Controller
         }
 
         $empleado->delete();
-        return response()->json(['message' => 'Empleado eliminado correctamente']);
+        return redirect()->route('admin.empleados.index')->with('success', 'Empleado eliminado correctamente') ;
     }
+
+    public function confirmDelete($id)
+{
+    $empleado = Empleado::find($id);
+    if (!$empleado) {
+        return redirect()->route('admin.empleados.index')->with('error', 'Empleado no encontrado');
+    }
+    return view('admin.delete', compact('empleado'));
+}
+
 }

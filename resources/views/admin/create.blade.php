@@ -7,10 +7,15 @@
 
 @stop
  @section('content')
+ @if(session('mensaje'))
+<div class="alert alert-success">
+     <strong>{{session('mensaje')}}</strong>
+</div>
+@endif
   <div class="card">
     <div class="card-body">
 
-        {!! Form::open(['route' => 'admin.empleados.store', 'files' => true, 'autocomplete' => 'off']) !!}
+        {!! Form::open(['route' => 'admin.empleados.store', 'files' => true, 'autocomplete' => 'on']) !!}
         
         <div class="form-group">
             {!! Form::label('nombre', 'Nombre') !!}
@@ -83,7 +88,10 @@
             @enderror
         </div>
         
-        {!! Form::submit('Guardar empleado', ['class' => 'btn btn-primary']) !!}
+        {!! Form::button('<i class="fa fa-plus"  aria-hidden="true"></i> Guardar', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
+        <a href="{{ route('admin.empleados.index') }}" class="btn btn-warning">
+        <i class="fa fa-window-close" aria-hidden="true"></i> Cancelar
+        </a>
         
         {!! Form::close() !!}
     </div>

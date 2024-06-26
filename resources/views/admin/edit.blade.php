@@ -1,16 +1,25 @@
 @extends('adminlte::page')
 
-@section('title', editar Empleado)
+@section('title', 'Editar Empleado')
 
 @section('content_header')
      <h1>Editar Empleado{{$empleado->nombre}}</h1>
 @stop
+@section('css')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> 
+@stop
+
 
 @section('content')
+@if(session('mensaje'))
+<div class="alert alert-success">
+     <strong>{{session('mensaje')}}</strong>
+</div>
+@endif
 <div class="card">
     <div class="card-body">
 
-        {!! Form::open(['route' => 'admin.empleados.update', 'files' => true, 'autocomplete' => 'off'], $empleado) !!}
+    {!! Form::model($empleado, ['route' => ['admin.empleados.update', $empleado->id], 'method' => 'put', 'files' => true, 'autocomplete' => 'off']) !!}
         
         <div class="form-group">
             {!! Form::label('nombre', 'Nombre') !!}
@@ -63,7 +72,9 @@
         <div class="form-group">
             {!! Form::label('id_puesto_trabajo', 'Puesto de Trabajo') !!}
             {!! Form::select('id_puesto_trabajo', $puestos, null, ['class' => 'form-control', 'placeholder' => 'Seleccione']) !!}
-             
+            @error('id_puesto_trabajo')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
         </div>
         
         <div class="form-group">
@@ -83,7 +94,10 @@
             @enderror
         </div>
         
-        {!! Form::submit('Guardar empleado', ['class' => 'btn btn-primary']) !!}
+        {!! Form::button('<i class="fas fa-edit"></i> Guardar' , ['type' => 'submit', 'class' => 'btn btn-primary']) !!} 
+        <a href="{{ route('admin.empleados.index') }}" class="btn btn-warning"> 
+        <i class="fa fa-window-close" aria-hidden="true"></i> Cancelar
+        </a>
         
         {!! Form::close() !!}
     </div>
