@@ -155,9 +155,9 @@ return [
     'layout_topnav' => null,
     'layout_boxed' => null,
     'layout_fixed_sidebar' => null,
-    'layout_fixed_navbar' => null,
+    'layout_fixed_navbar' => true,
     'layout_fixed_footer' => null,
-    'layout_dark_mode' => true,
+    'layout_bluish_mode' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -238,7 +238,7 @@ return [
 
     'right_sidebar' => false,
     'right_sidebar_icon' => 'fas fa-cogs',
-    'right_sidebar_theme' => 'dark',
+    'right_sidebar_theme' => '',
     'right_sidebar_slide' => true,
     'right_sidebar_push' => true,
     'right_sidebar_scrollbar_theme' => 'os-theme-light',
@@ -322,18 +322,38 @@ return [
             'label' => 4,
             'label_color' => 'success',
         ],
-        ['header' => 'account_settings'],
+        ['header' => 'Administracion'],
+
+        [
+            'text' => 'Asistencia',
+            'url' => '#',
+            'icon' => 'fa fa-calendar-check',
+        ],
+
+        [
+            'text' => 'Empleados',
+            'icon' => 'fa fa-users',
+            'submenu' => [
+                [
+                    'text' => 'Lista de Empleados',
+                    'url' => 'admin/empleados',
+                    'icon' => 'fas fa-fw fa-user',
+                ],
+                [
+                    'text' => 'Horarios',
+                    'url' => '#',
+                    'icon' => 'fa fa-clock',
+                ],
+            ],
+
+        ],
 
         [
             'text' => 'Administradores',
             'url' => 'admin/admin',
             'icon' => 'fas fa-fw fa-user',
         ],
-        [
-            'text' => 'Empleados',
-            'url' => 'admin/empleados',
-            'icon' => 'fas fa-fw fa-user',
-        ],
+        
         
         [
             'text' => 'Registro Acceso',
@@ -477,7 +497,7 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
@@ -487,7 +507,7 @@ return [
             ],
         ],
         'Pace' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'css',

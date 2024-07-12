@@ -34,31 +34,14 @@ class EmpleadosController extends Controller
     }
 
     public function create()
-    {
-       
-
-        
-
-        
-        
-          $puestos = PuestoTrabajo::all();
-          $jornadas = Jornadas::all();
-
-          $jornadas = $jornadas->mapWithKeys(function ($jornada) {
+    {   
+        $puestos = PuestoTrabajo::pluck('nombre', 'id');
+        $jornadas = Jornadas::all()->mapWithKeys(function ($jornada) {
             return [$jornada->id => $jornada->entrada . ' - ' . $jornada->salida];
+        })->toArray();
 
-            
-        });
-
-        $puestos = $puestos->mapWithKeys(function ($puesto) {
-            return [$puesto->id => $puesto->nombre];
-            });
-    
-
-        
-        return view('admin.create',compact('puestos', 'jornadas'));
-
-    return response()->json(['success' => 'Empleado guardado exitosamente.']);
+        // Retornar la vista con los datos
+        return view('admin.create', compact('puestos', 'jornadas'));
     }
 
     public function store(Request $request)
@@ -67,13 +50,13 @@ class EmpleadosController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:50',
             'apellido' => 'required|string|max:50',
-            'direccion' => 'required|string|max:255',
+            'direccion' => 'required|string|max:70',
             'fecha_nacimiento' => 'required|date',
-            'informacion_contacto' => 'required|string|max:100|unique:empleados,informacion_contacto',
+            'informacion_contacto' => 'required|string|max:70|unique:empleados,informacion_contacto',
             'genero' => 'required|in:Masculino,Femenino,Otro',
             'id_puesto_trabajo' => 'required|exists:puestos_trabajo,id', 
             'id_jornadas' => 'required|exists:jornadas,id',
-            'foto' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+            'foto' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
         ]);
        
     
@@ -84,11 +67,16 @@ class EmpleadosController extends Controller
         
         
         $empleado = Empleado::create($data);
+
         
 
-        if ($request->hasFile('foto')) {
-            $data['foto'] = $request->file('foto')->store('fotos', 'public');
+       
+    if ($request->hasFile('foto')) {
+        if ($empleado->foto) {
+            Storage::delete('public/' . $empleado->foto);
         }
+        $data['foto'] = $request->file('foto')->store('fotos', 'public');
+    }
 
         
     
@@ -151,7 +139,7 @@ class EmpleadosController extends Controller
         'genero' => 'required|in:Masculino,Femenino,Otro',
         'id_puesto_trabajo' => 'required|exists:puestos_trabajo,id',
         'id_jornadas' => 'required|exists:jornadas,id',
-        'foto' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+        'foto' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
     ]);
 
     $data = $request->all();

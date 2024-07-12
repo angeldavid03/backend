@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('puestos_trabajo', function (Blueprint $table) {
             $table->integer('id', true);
-            $table->string('nombre', 100)->unique();
+            $table->string('nombre', 50)->unique();
             
         });
     }

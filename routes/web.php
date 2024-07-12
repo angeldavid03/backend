@@ -35,5 +35,10 @@ Route::prefix('admin')->group(function () {
     Route::delete('/empleados/{id}/destroy', [empleadosController::class, 'destroy'])->name('admin.empleados.destroy');
 });
 
+
+
+
+
+
 // Admins
 Route::get('admin/admin', [AdminController::class, 'index'])->name('admin.index');

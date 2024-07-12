@@ -1,106 +1,122 @@
-@extends('adminlte::page')
+<div class="modal fade" id="editmodal" tabindex="-1" aria-labelledby="editEmployeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editEmployeeModalLabel">Editar Empleado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{route('admin.empleados.update', $empleado->id) }}"  method="POST" enctype="multipart/form-data" id="editEmployeeForm" autocomplete="off">
+                    @csrf
+                    @method('PUT')
 
-@section('title', 'Editar Empleado')
+                    
 
-@section('content_header')
-     <h1>Editar Empleado{{$empleado->nombre}}</h1>
-@stop
-@section('css')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> 
-@stop
+                    <div class="form-group">
+                        <label for="nombre">Nombre</label>
+                        <input type="text" name="nombre" id="nombre" class="form-control" value="{{$empleado->nombre}}" placeholder="Ingrese el nombre"  required>
+                        @error('nombre')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
 
+                    <div class="form-group">
+                        <label for="apellido">Apellido</label>
+                        <input type="text" name="apellido" id="apellido" class="form-control" placeholder="Ingrese el apellido" required>
+                        @error('apellido')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-@section('content')
-@if(session('mensaje'))
-<div class="alert alert-success">
-     <strong>{{session('mensaje')}}</strong>
-</div>
-@endif
-<div class="card">
-    <div class="card-body">
+                    <div class="form-group">
+                        <label for="direccion">Dirección</label>
+                        <input type="text" name="direccion" id="direccion" class="form-control" placeholder="Ingrese la dirección" required>
+                        @error('direccion')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-    {!! Form::model($empleado, ['route' => ['admin.empleados.update', $empleado->id], 'method' => 'put', 'files' => true, 'autocomplete' => 'off']) !!}
-        
-        <div class="form-group">
-            {!! Form::label('nombre', 'Nombre') !!}
-            {!! Form::text('nombre', null, ['class' => 'form-control', 'placeholder' => 'Ingrese el nombre']) !!}
-            @error('nombre')
-            <span class="text-danger">{{$message}}</span>
-            @enderror
-        </div>
-        
-        <div class="form-group">
-            {!! Form::label('apellido', 'Apellido') !!}
-            {!! Form::text('apellido', null, ['class' => 'form-control', 'placeholder' => 'Ingrese el apellido']) !!}
-            @error('apellido')
-            <span class="text-danger">{{$message}}</span>
-            @enderror
-        </div>
-        
-        <div class="form-group">
-            {!! Form::label('direccion', 'Dirección') !!}
-            {!! Form::text('direccion', null, ['class' => 'form-control', 'placeholder' => 'Ingrese la dirección']) !!}
-            @error('direccion')
-            <span class="text-danger">{{$message}}</span>
-            @enderror
-        </div>
-        
-        <div class="form-group">
-            {!! Form::label('fecha_nacimiento', 'Fecha de Nacimiento') !!}
-            {!! Form::date('fecha_nacimiento', null, ['class' => 'form-control']) !!}
-            @error('fecha_nacimiento')
-            <span class="text-danger">{{$message}}</span>
-            @enderror
-        </div>
-        
-        <div class="form-group">
-            {!! Form::label('informacion_contacto', 'Información de Contacto') !!}
-            {!! Form::text('informacion_contacto', null, ['class' => 'form-control', 'placeholder' => 'Ingrese la información de contacto']) !!}
-            @error('informacion_contacto')
-            <span class="text-danger">{{$message}}</span>
-            @enderror
-        </div>
-        
-        <div class="form-group">
-            {!! Form::label('genero', 'Género') !!}
-            {!! Form::select('genero', ['Masculino' => 'Masculino', 'Femenino' => 'Femenino', 'Otro' => 'Otro'], null, ['class' => 'form-control', 'placeholder' => 'Seleccione']) !!}
-            @error('genero')
-            <span class="text-danger">{{$message}}</span>
-            @enderror
-        </div>
-        
-        <div class="form-group">
-            {!! Form::label('id_puesto_trabajo', 'Puesto de Trabajo') !!}
-            {!! Form::select('id_puesto_trabajo', $puestos, null, ['class' => 'form-control', 'placeholder' => 'Seleccione']) !!}
-            @error('id_puesto_trabajo')
-            <span class="text-danger">{{$message}}</span>
-            @enderror
-        </div>
-        
-        <div class="form-group">
-             {!! Form::label('id_jornadas', 'Jornada') !!}
-             {!! Form::select('id_jornadas', $jornadas, null, ['class' => 'form-control', 'placeholder' => 'Seleccione']) !!}
-             @error('id_jornadas')
-             <span class="text-danger">{{$message}}</span>
-             @enderror
-       </div>
+                    <div class="form-group">
+                        <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                        <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control" required>
+                        @error('fecha_nacimiento')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-        
-        <div class="form-group">
-            {!! Form::label('foto', 'Foto') !!}
-            {!! Form::file('foto', ['class' => 'form-control']) !!}
-            @error('foto')
-            <span class="text-danger">{{$message}}</span>
-            @enderror
+                    <div class="form-group">
+                        <label for="informacion_contacto">Email</label>
+                        <input type="text" name="informacion_contacto" id="informacion_contacto" class="form-control" placeholder="Ingrese la información de contacto" required>
+                        @error('informacion_contacto')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="genero">Género</label>
+                        <select name="genero" id="genero" class="form-control" required>
+                            <option value="">Seleccione</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                        @error('genero')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_puesto_trabajo">Cargo</label>
+                        <select name="id_puesto_trabajo" id="id_puesto_trabajo" class="form-control">
+                            <option value="">Seleccione</option>
+                            @foreach($puestos as $puesto)
+                                <option value="{{ $puesto->id }}">{{ $puesto->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_jornadas">Jornada</label>
+                        <select name="id_jornadas" id="id_jornadas" class="form-control" required>
+                            <option value="">Seleccione</option>
+                            @foreach($jornadas as $jornada)
+                                <option value="{{ $jornada->id }}">{{ $jornada->entrada }} - {{ $jornada->salida }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="foto">Foto</label>
+                        <input type="file" name="foto" id="foto" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <img id="preview-image-edit" src="#" alt="Preview Image" style="display: none; max-height: 150px;">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-save" aria-hidden="true"></i> Guardar</button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal"><i class="fa fa-window-close" aria-hidden="true"></i> Cancelar</button>
+                </form>
+            </div>
         </div>
-        
-        {!! Form::button('<i class="fas fa-edit"></i> Guardar' , ['type' => 'submit', 'class' => 'btn btn-primary']) !!} 
-        <a href="{{ route('admin.empleados.index') }}" class="btn btn-warning"> 
-        <i class="fa fa-window-close" aria-hidden="true"></i> Cancelar
-        </a>
-        
-        {!! Form::close() !!}
     </div>
- </div>
- 
-@stop
+</div>
+
+<script>
+    document.getElementById('foto').onchange = function (event) {
+        let reader = new FileReader();
+        reader.onload = function(){
+            let output = document.getElementById('preview-image-edit');
+            output.src = reader.result;
+            output.style.display = 'block';
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    };
+
+   
+
+    
+    
+</script>
