@@ -1,4 +1,4 @@
-<div class="modal fade" id="editmodal" tabindex="-1" aria-labelledby="editEmployeeModalLabel" aria-hidden="true">
+ <div class="modal fade" id="editmodal{{ $empleado->id }}" tabindex="-1" aria-labelledby="editEmployeeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -24,7 +24,7 @@
 
                     <div class="form-group">
                         <label for="apellido">Apellido</label>
-                        <input type="text" name="apellido" id="apellido" class="form-control" placeholder="Ingrese el apellido" required>
+                        <input type="text" name="apellido" id="apellido" class="form-control" value="{{$empleado->apellido}}" placeholder="Ingrese el apellido" required>
                         @error('apellido')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -32,7 +32,7 @@
 
                     <div class="form-group">
                         <label for="direccion">Dirección</label>
-                        <input type="text" name="direccion" id="direccion" class="form-control" placeholder="Ingrese la dirección" required>
+                        <input type="text" name="direccion" id="direccion" class="form-control" value="{{$empleado->direccion}}" placeholder="Ingrese la dirección" required>
                         @error('direccion')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -40,7 +40,7 @@
 
                     <div class="form-group">
                         <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-                        <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control" required>
+                        <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control" value="{{$empleado->fecha_nacimiento}}" required>
                         @error('fecha_nacimiento')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -48,7 +48,7 @@
 
                     <div class="form-group">
                         <label for="informacion_contacto">Email</label>
-                        <input type="text" name="informacion_contacto" id="informacion_contacto" class="form-control" placeholder="Ingrese la información de contacto" required>
+                        <input type="text" name="informacion_contacto" id="informacion_contacto" class="form-control" value="{{$empleado->informacion_contacto}}" placeholder="Ingrese la información de contacto" required>
                         @error('informacion_contacto')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -56,11 +56,11 @@
 
                     <div class="form-group">
                         <label for="genero">Género</label>
-                        <select name="genero" id="genero" class="form-control" required>
-                            <option value="">Seleccione</option>
-                            <option value="Masculino">Masculino</option>
-                            <option value="Femenino">Femenino</option>
-                            <option value="Otro">Otro</option>
+                        <select name="genero" id="genero" class="form-control" value="{{$empleado->genero}}" required>
+                        <option value="">Seleccione</option>
+                            <option value="Masculino" {{ $empleado->genero == 'Masculino' ? 'selected' : '' }}>Masculino</option>
+                            <option value="Femenino" {{ $empleado->genero == 'Femenino' ? 'selected' : '' }}>Femenino</option>
+                            <option value="Otro" {{ $empleado->genero == 'Otro' ? 'selected' : '' }}>Otro</option>
                         </select>
                         @error('genero')
                             <span class="text-danger">{{ $message }}</span>
@@ -72,7 +72,7 @@
                         <select name="id_puesto_trabajo" id="id_puesto_trabajo" class="form-control">
                             <option value="">Seleccione</option>
                             @foreach($puestos as $puesto)
-                                <option value="{{ $puesto->id }}">{{ $puesto->nombre }}</option>
+                            <option value="{{ $puesto->id }}" {{ $empleado->id_puesto_trabajo == $puesto->id ? 'selected' : '' }}>{{ $puesto->nombre }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -82,7 +82,7 @@
                         <select name="id_jornadas" id="id_jornadas" class="form-control" required>
                             <option value="">Seleccione</option>
                             @foreach($jornadas as $jornada)
-                                <option value="{{ $jornada->id }}">{{ $jornada->entrada }} - {{ $jornada->salida }}</option>
+                            <option value="{{ $jornada->id }}" {{ $empleado->id_jornadas == $jornada->id ? 'selected' : '' }}>{{ $jornada->entrada }} - {{ $jornada->salida }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -114,9 +114,5 @@
         };
         reader.readAsDataURL(event.target.files[0]);
     };
-
-   
-
-    
     
 </script>
