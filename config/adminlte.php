@@ -341,7 +341,7 @@ return [
                 ],
                 [
                     'text' => 'Horarios',
-                    'url' => '#',
+                    'url' => 'admin/horarios',
                     'icon' => 'fa fa-clock',
                 ],
             ],

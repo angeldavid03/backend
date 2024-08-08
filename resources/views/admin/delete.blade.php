@@ -1,4 +1,4 @@
-<div class="modal fade" id="eliminarempleado{{$empleado->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editmodal{{$empleado->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -14,7 +14,8 @@
             <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">
             <i class="fa fa-trash" aria-hidden="true"></i> Eliminar </button>
  
-            <button type="button" class="btn btn-warning" data-dismiss="modal"><i class="fa fa-window-close" aria-hidden="true"></i> Cancelar</button>
+            <button type="button" class="btn btn-warning" data-dismiss="modal">
+              <i class="fa fa-window-close" aria-hidden="true"></i> Cancelar</button>
             
         </form>
         </div>

@@ -71,12 +71,13 @@ class EmpleadosController extends Controller
         
 
        
-    if ($request->hasFile('foto')) {
-        if ($empleado->foto) {
-            Storage::delete('public/' . $empleado->foto);
+        if ($request->hasFile('foto')) {
+            // Guarda la foto en el disco público y obtiene el nombre del archivo
+            $fotoPath = $request->file('foto')->store('fotos', 'public');
+            // Actualiza el campo 'foto' en la base de datos
+            $empleado->foto = $fotoPath;
+            $empleado->save();
         }
-        $data['foto'] = $request->file('foto')->store('fotos', 'public');
-    }
 
         
     

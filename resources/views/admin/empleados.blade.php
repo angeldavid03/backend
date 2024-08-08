@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap5.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 
 <style>
     .action-buttons {
@@ -91,9 +92,10 @@
                         </td>
                         <td>{{ Carbon::parse($empleado->created_at)->format('d-m-Y') }}</td> 
                         <td>
-                        <button class="btn btn-primary editButton"  data-toggle="modal" data-target="#editmodal{{$empleado->id}}">Editar</button>
+                        <button class="btn btn-primary editButton"  data-toggle="modal" data-target="#editmodal{{$empleado->id}}">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Editar</button>
 
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $empleado->id }}">
+                        <button type="button" class="btn btn-danger"  data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="{{$empleado->id}}" data-bs-nombre="{{ $empleado->nombre }}">
                          <i class="fa fa-trash" aria-hidden="true"></i> Eliminar
                           </button>
                        </td>
@@ -206,7 +208,9 @@
             </div>
         </div>
     </div>
-</div>
+</div>             
+                    
+
                 @endforeach
             </tbody>
         </table>
@@ -218,30 +222,37 @@
   @include('admin.create')
 
 
-    <!--Eliminar Empleado -->
+   
     <!-- Modal de Eliminación -->
-<div class="modal fade" id="deleteModal{{ $empleado->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Confirmar Eliminación</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                ¿Estás seguro de que deseas eliminar a este empleado ?
-            </div>
-            <div class="modal-footer">
-                <form method="POST" action="{{ route('admin.empleados.destroy', $empleado->id) }}">
-                    @csrf
-                    @method('DELETE')
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-danger">Eliminar</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Eliminar empleado</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <p>
+        ¿Confirmas la eliminacion de este empleado?
+       </p>
+
+      </div>
+      <div class="modal-footer">
+        
+         <form method="post" action="" id="deleteForm">
+            @csrf 
+            @method('DELETE')
+         <button type="submit" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>Eliminar</button>
+         <button type="button" class="btn btn-warning" data-dismiss="modal">
+            <i class="fa fa-window-close" aria-hidden="true"></i> Cancelar</button>
+         </form>
+        
+       
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -272,15 +283,37 @@
         });
 
         document.getElementById('foto').onchange = function (event) {
-        let reader = new FileReader();
-        reader.onload = function(){
-            let output = document.getElementById('preview-image');
-            output.src = reader.result;
-            output.style.display = 'block';
+            let reader = new FileReader();
+            reader.onload = function(){
+                let output = document.getElementById('preview-image');
+                output.src = reader.result;
+                output.style.display = 'block';
+            };
+            reader.readAsDataURL(event.target.files[0]);
         };
-        reader.readAsDataURL(event.target.files[0]);
-    };
     });
+
+    const deleteModal = document.getElementById('deleteModal');
+if (deleteModal) {
+  deleteModal.addEventListener('show.bs.modal', event => {
+    // Botón que activó el modal
+    const button = event.relatedTarget;
+
+    // Extrae el ID del empleado desde los atributos data-bs-*
+    const empleadoId = button.getAttribute('data-bs-whatever');
+    const empleadoNombre = button.getAttribute('data-bs-nombre');
+
+    // Encuentra el formulario dentro del modal y actualiza su acción
+    const deleteForm = deleteModal.querySelector('#deleteForm');
+    deleteForm.action = `/admin/empleados/${empleadoId}/destroy`; 
+
+    const modalTitle = deleteModal.querySelector('.modal-title');
+    modalTitle.textContent = `Eliminar empleado: ${empleadoNombre}`;
+  });
+}
+
+
+
 </script>
 
 
