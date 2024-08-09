@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Carbon\Carbon;
 
 class admin extends Authenticatable
 {
@@ -32,4 +33,24 @@ class admin extends Authenticatable
     protected $hidden = [
         'password'
     ];
+
+    public function adminlte_image()
+    {
+        return 'data:image/jpeg;base64,' . base64_encode($this->foto);
+    }
+
+    public function adminlte_desc()
+    {
+        // Formatear la fecha de creación
+        $fechaRegistro = Carbon::parse($this->created_at)->format('d/m/Y');
+        
+        // Devolver el nombre completo y la fecha de registro
+        return "{$this->nombre} {$this->apellido} -  Miembro desde: {$fechaRegistro}";
+    }
+
+    public function adminlte_profile_url()
+    {
+        // Ruta al perfil del administrador
+        return route('admin.profile');
+    }
 }

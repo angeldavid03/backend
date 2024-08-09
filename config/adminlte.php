@@ -135,10 +135,10 @@ return [
 
     'usermenu_enabled' => true,
     'usermenu_header' => true,
-    'usermenu_header_class' => 'bg-danger',
-    'usermenu_image' => false,
-    'usermenu_desc' => false,
-    'usermenu_profile_url' => false,
+    'usermenu_header_class' => 'bg-primary text-white',
+    'usermenu_image' => true,
+    'usermenu_desc' => true,
+    'usermenu_profile_url' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -154,7 +154,7 @@ return [
 
     'layout_topnav' => null,
     'layout_boxed' => null,
-    'layout_fixed_sidebar' => null,
+    'layout_fixed_sidebar' => true,
     'layout_fixed_navbar' => true,
     'layout_fixed_footer' => null,
     'layout_bluish_mode' => true,
@@ -348,11 +348,7 @@ return [
 
         ],
 
-        [
-            'text' => 'Administradores',
-            'url' => 'admin/admin',
-            'icon' => 'fas fa-fw fa-user',
-        ],
+        
         
         
         [

@@ -51,4 +51,7 @@ Route::delete('/admin/jornadas/{id}', [JornadasController::class, 'destroy'])->n
 
 
 // Admins
-Route::get('admin/admin', [AdminController::class, 'index'])->name('admin.index');
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/profile', [AdminController::class, 'showProfile'])->name('admin.profile');
+    Route::post('/admin/profile', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
+});  

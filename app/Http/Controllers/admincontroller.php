@@ -3,109 +3,87 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use App\Models\Admin;
-use Illuminate\Support\Facades\Validator;
+use App\Models\admin;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class admincontroller extends Controller
 {
-    public function index()
+    public function showProfile()
     {
-        $admin = Admin::all();
-        if ($admin->isEmpty()) {
-            return response()->json([
-                'message' => 'No hay admins registrados'
-            ], 404);
-        }
-        return response()->json($admin);
-        
+        // Obtener el administrador autenticado
+        $admin = Auth::user(); 
+
+        session(['url.intended' => url()->previous()]);
+        return view('admin.profile', compact('admin'));
     }
 
-    public function show($id)
-    {
-        $admin = Admin::find($id);
+    public function updateProfile(Request $request)
+{
+    // Obtener el administrador autenticado
+    $admin = Auth::user();
 
-        if (!$admin) {
-            return response()->json(['mensaje' => 'No se encontro el administrador'], 404);
+    // Validar los datos del formulario
+    $request->validate([
+        'username' => 'required|string|max:30',
+        'nombre' => 'required|string|max:50',
+        'apellido' => 'required|string|max:50',
+        'email' => 'required|email|max:100',
+        'foto' => 'nullable|image|max:2048',
+        'current_password' => 'nullable|current_password', // Validación de contraseña actual
+        'new_password' => 'nullable|string|min:10|confirmed'
+    ]);
+
+    // Verifica que $admin sea una instancia del modelo Admin
+    if ($admin instanceof Admin) {
+        // Comparar los datos antiguos con los nuevos datos
+        $isUpdated = false;
+
+        // Verificar si los datos han cambiado
+        if ($admin->username !== $request->input('username')) {
+            $admin->username = $request->input('username');
+            $isUpdated = true;
+        }
+        if ($admin->nombre !== $request->input('nombre')) {
+            $admin->nombre = $request->input('nombre');
+            $isUpdated = true;
+        }
+        if ($admin->apellido !== $request->input('apellido')) {
+            $admin->apellido = $request->input('apellido');
+            $isUpdated = true;
+        }
+        if ($admin->email !== $request->input('email')) {
+            $admin->email = $request->input('email');
+            $isUpdated = true;
         }
 
-        return response()->json($admin);
+        // Si hay una foto nueva, procesar y guardar
+        if ($request->hasFile('foto')) {
+            $admin->foto = file_get_contents($request->file('foto')->getRealPath());
+            $isUpdated = true;
+        }
+
+        if ($request->filled('current_password') && $request->filled('new_password')) {
+            if (Hash::check($request->input('current_password'), $admin->password)) {
+                $admin->password = Hash::make($request->input('new_password'));
+                $isUpdated = true;
+            } else {
+                return redirect()->back()->with('error', 'La contraseña actual es incorrecta.');
+            }
+        }
+
+
+        // Guardar los cambios si hay actualizaciones
+        if ($isUpdated) {
+            $admin->save();
+            return redirect()->route('admin.empleados.index')->with('success', 'Perfil actualizado con éxito.');
+        } else {
+            return redirect()->back()->with('info', 'No se realizaron cambios en el perfil.');
+        }
+    } else {
+        return redirect()->back()->with('error', 'No se pudo actualizar el perfil.');
     }
+}
 
     
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'username' => 'required|string|max:30',
-            'password' => 'required|string|min:6',
-            'nombre' => 'required|string|max:50',
-            'apellido' => 'required|string|max:50',
-            'email' => 'required|email|max:100|unique:admin,email',
-            'foto' => 'nullable|image|max:2048',
-        ]); 
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $admin = Admin::create([
-            'username' => $request->username,
-            'password' => Hash::make($request->password),
-            'nombre' => $request->nombre,
-            'apellido' => $request->apellido,
-            'email' => $request->email,
-            'foto' => $request->foto,
-        ]);
-
-        return response()->json($admin, 201);
-    }
-
-
-    public function update(Request $request, $id)
-    {
-        $admin = Admin::find($id);
-
-        if (!$admin) {
-            return response()->json(['mensaje' => 'No se encontró el administrador'], 404);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'username' => 'required|string|max:30',
-            'password' => 'nullable|string|min:6',
-            'nombre' => 'required|string|max:50',
-            'apellido' => 'required|string|max:50',
-            'email' => 'required|email|max:100|unique:admin,email,' . $admin->id,
-            'foto' => 'nullable|image|max:2048',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $admin->username = $request->username;
-        if ($request->filled('password')) {
-            $admin->password = Hash::make($request->password);
-        }
-        $admin->nombre = $request->nombre;
-        $admin->apellido = $request->apellido;
-        $admin->email = $request->email;
-        $admin->foto = $request->foto;
-        $admin->save();
-
-        return response()->json($admin);
-    }
-
-    public function destroy($id)
-    {
-        $admin = Admin::find($id);
-
-        if (!$admin) {
-            return response()->json(['mensaje' => 'No se encontró el administrador'], 404);
-        }
-
-        $admin->delete();
-
-        return response()->json(['mensaje' => 'Administrador exterminado, volvere!']);
-    }
 }
