@@ -34,5 +34,5 @@ Route::delete('/admins/{id}',[admincontroller::class,'destroy']);
 Route::get('/empleados',[empleadoscontroller2::class, 'index']);
 Route::get('/empleados/{id}',[empleadoscontroller2::class, 'show']);
 Route::post('/empleados',[empleadoscontroller2::class, 'store']);
-Route::put('/empleados/{id}',[empleadoscontroller2::class, 'update']);
+Route::patch('/empleados/{id}',[empleadoscontroller2::class, 'update']);
 Route::delete('/empleados/{id}',[empleadoscontroller2::class, 'destroy']);
