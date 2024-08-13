@@ -52,6 +52,6 @@ Route::delete('/admin/jornadas/{id}', [JornadasController::class, 'destroy'])->n
 
 // Admins
 Route::middleware('auth')->group(function () {
-    Route::get('/admin/profile', [AdminController::class, 'showProfile'])->name('admin.profile');
-    Route::post('/admin/profile', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
+    Route::get('/admin/menu', [AdminController::class, 'showProfile'])->name('admin.menu');
+    Route::post('/admin/menu', [AdminController::class, 'updateProfile'])->name('admin.menu.update');
 });  

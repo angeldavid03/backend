@@ -11,9 +11,7 @@ class admincontroller extends Controller
 {
     public function showProfile()
     {
-        // Obtener el administrador autenticado
         $admin = Auth::user(); 
-
         session(['url.intended' => url()->previous()]);
         return view('admin.profile', compact('admin'));
     }
@@ -30,52 +28,41 @@ class admincontroller extends Controller
         'apellido' => 'required|string|max:50',
         'email' => 'required|email|max:100',
         'foto' => 'nullable|image|max:2048',
-        'current_password' => 'nullable|current_password', // Validación de contraseña actual
-        'new_password' => 'nullable|string|min:10|confirmed'
+        'current_password' => 'nullable|string',
+        'new_password' => 'nullable|string|', // Se ajusta a mínimo 8 caracteres
     ]);
 
     // Verifica que $admin sea una instancia del modelo Admin
     if ($admin instanceof Admin) {
-        // Comparar los datos antiguos con los nuevos datos
-        $isUpdated = false;
+        $updated = false; // Indicador de si se realizaron cambios
 
-        // Verificar si los datos han cambiado
-        if ($admin->username !== $request->input('username')) {
-            $admin->username = $request->input('username');
-            $isUpdated = true;
-        }
-        if ($admin->nombre !== $request->input('nombre')) {
-            $admin->nombre = $request->input('nombre');
-            $isUpdated = true;
-        }
-        if ($admin->apellido !== $request->input('apellido')) {
-            $admin->apellido = $request->input('apellido');
-            $isUpdated = true;
-        }
-        if ($admin->email !== $request->input('email')) {
-            $admin->email = $request->input('email');
-            $isUpdated = true;
+        // Verifica la contraseña actual
+        if ($request->filled('current_password') && !Hash::check($request->current_password, $admin->password)) {
+            return redirect()->back()->with('error', 'La contraseña actual es incorrecta.');
         }
 
-        // Si hay una foto nueva, procesar y guardar
+        // Actualizar los campos de perfil si hay cambios
+        $data = $request->only('username', 'nombre', 'apellido', 'email');
+
         if ($request->hasFile('foto')) {
-            $admin->foto = file_get_contents($request->file('foto')->getRealPath());
-            $isUpdated = true;
+            $data['foto'] = file_get_contents($request->file('foto')->getRealPath());
         }
 
-        if ($request->filled('current_password') && $request->filled('new_password')) {
-            if (Hash::check($request->input('current_password'), $admin->password)) {
-                $admin->password = Hash::make($request->input('new_password'));
-                $isUpdated = true;
-            } else {
-                return redirect()->back()->with('error', 'La contraseña actual es incorrecta.');
-            }
-        }
-
-
-        // Guardar los cambios si hay actualizaciones
-        if ($isUpdated) {
+        // Verifica si hay cambios en los datos del perfil
+        if ($admin->fill($data)->isDirty()) {
             $admin->save();
+            $updated = true;
+        }
+
+        // Actualizar la contraseña si se proporciona una nueva
+        if ($request->filled('new_password')) {
+            $admin->password = Hash::make($request->new_password); // Hashea la nueva contraseña
+            $admin->save();
+            $updated = true;
+        }
+
+          // Redirige a la página deseada después de la actualización
+          if ($updated) {
             return redirect()->route('admin.empleados.index')->with('success', 'Perfil actualizado con éxito.');
         } else {
             return redirect()->back()->with('info', 'No se realizaron cambios en el perfil.');
@@ -83,7 +70,5 @@ class admincontroller extends Controller
     } else {
         return redirect()->back()->with('error', 'No se pudo actualizar el perfil.');
     }
-}
-
-    
+ }
 }

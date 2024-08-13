@@ -34,6 +34,10 @@ class admin extends Authenticatable
         'password'
     ];
 
+    protected $dates =[
+        'created_at'
+    ];
+
     public function adminlte_image()
     {
         return 'data:image/jpeg;base64,' . base64_encode($this->foto);
@@ -41,16 +45,15 @@ class admin extends Authenticatable
 
     public function adminlte_desc()
     {
-        // Formatear la fecha de creación
-        $fechaRegistro = Carbon::parse($this->created_at)->format('d/m/Y');
+        // Convertir a Carbon si es un string
+        $fechaCreacion = $this->created_at instanceof Carbon ? $this->created_at : Carbon::parse($this->created_at);
         
-        // Devolver el nombre completo y la fecha de registro
-        return "{$this->nombre} {$this->apellido} -  Miembro desde: {$fechaRegistro}";
+        return $this->nombre . ' ' . $this->apellido . '<br>Miembro desde: ' . $fechaCreacion->format('d/m/Y');
     }
 
     public function adminlte_profile_url()
     {
         // Ruta al perfil del administrador
-        return route('admin.profile');
+        return ('admin.menu');
     }
 }

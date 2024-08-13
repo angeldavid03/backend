@@ -352,9 +352,9 @@ return [
         
         
         [
-            'text' => 'Registro Acceso',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
+            'text' => 'Cargos',
+            'url' => 'admin/cargos',
+            'icon' => 'fa fa-briefcase',
         ],
         [
             'text' => 'multilevel',

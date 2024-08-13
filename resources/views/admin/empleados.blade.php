@@ -53,7 +53,8 @@
                  </button>
              </div>
            @endif
-           <button class="btn btn-success" data-toggle="modal" data-target="#createmodal"><i class="fa fa-user-plus" aria-hidden="true"></i>Agregar</button>
+           <button class="btn btn-success" data-toggle="modal" data-target="#createmodal">
+            <i class="fa fa-user-plus" aria-hidden="true"></i> Agregar</button>
          <table id="empleados-table" class="table table-bordered display nowrap" cellspacing="0" width="100%" >
             <thead>
                 <tr>
@@ -93,7 +94,7 @@
                         <td>{{ Carbon::parse($empleado->created_at)->format('d-m-Y') }}</td> 
                         <td>
                         <button class="btn btn-primary editButton"  data-toggle="modal" data-target="#editmodal{{$empleado->id}}">
-                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Editar</button>
+                        <i class="fa fa-pencil" aria-hidden="true"></i> Editar</button>
 
                         <button type="button" class="btn btn-danger"  data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="{{$empleado->id}}" data-bs-nombre="{{ $empleado->nombre }}">
                          <i class="fa fa-trash" aria-hidden="true"></i> Eliminar
@@ -243,9 +244,9 @@
          <form method="post" action="" id="deleteForm">
             @csrf 
             @method('DELETE')
-         <button type="submit" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>Eliminar</button>
-         <button type="button" class="btn btn-warning" data-dismiss="modal">
-            <i class="fa fa-window-close" aria-hidden="true"></i> Cancelar</button>
+         <button type="submit" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Eliminar</button>
+         <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
+         <i class="fa fa-window-close" aria-hidden="true"></i> Close</button>
          </form>
         
        
