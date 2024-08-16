@@ -92,8 +92,8 @@
                         <img id="preview-image" src="#" alt="Preview Image" style="display: none; max-height: 150px;">
                     </div>
 
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Guardar</button>
-                    <button type="button" class="btn btn-warning" data-dismiss="modal"><i class="fa fa-window-close" aria-hidden="true"></i> Cancelar</button>
+                    <button type="submit" class="btn btn-outline-primary" ><i class="fa fa-plus" aria-hidden="true"></i> Guardar</button>
+                    <button type="button" class="btn btn-outline-warning" data-dismiss="modal"><i class="fa fa-window-close" aria-hidden="true"></i> Cancelar</button>
                 </form>
             </div>
         </div>

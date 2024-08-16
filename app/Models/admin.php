@@ -48,12 +48,12 @@ class admin extends Authenticatable
         // Convertir a Carbon si es un string
         $fechaCreacion = $this->created_at instanceof Carbon ? $this->created_at : Carbon::parse($this->created_at);
         
-        return $this->nombre . ' ' . $this->apellido . '<br>Miembro desde: ' . $fechaCreacion->format('d/m/Y');
+        return $this->nombre . ' ' . $this->apellido .'            '.'Miembro desde: ' . $fechaCreacion->format('d/m/Y');
     }
 
     public function adminlte_profile_url()
     {
         // Ruta al perfil del administrador
-        return ('admin.menu');
+        return route('admin.profile');
     }
 }

@@ -33,7 +33,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <button class="btn btn-success" data-toggle="modal" data-target="#createJornadaModal">
+                <button class="btn btn-outline-success" data-toggle="modal" data-target="#createJornadaModal">
                     <i class="fa fa-plus" aria-hidden="true"></i> Agregar Jornada
                 </button>
 
@@ -53,11 +53,11 @@
                                 <td>{{ $jornada->entrada }}</td>
                                 <td>{{ $jornada->salida }}</td>
                                 <td>
-                                <button class="btn btn-primary" data-toggle="modal" data-target="#editModal{{ $jornada->id }}">
+                                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#editModal{{ $jornada->id }}">
                                         <i class="fa fa-pencil" aria-hidden="true"></i> Editar
                                     </button>
 
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ $jornada->id }}">
+                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ $jornada->id }}">
                                         <i class="fa fa-trash" aria-hidden="true"></i> Eliminar
                                     </button>
                                 </td>
@@ -85,10 +85,10 @@
                                                 <label for="edit-salida" class="form-label">Hora de Salida</label>
                                                 <input type="time" class="form-control" id="edit-salida" value="{{$jornada->salida}}" name="salida" required>
                                             </div>
-                                            <button type="submit" class="btn btn-primary">
+                                            <button type="submit" class="btn btn-outline-primary">
                                             <i class="fa fa-pencil-square" aria-hidden="true"></i> Actualizar</button>
 
-                                            <button type="button" class="btn btn-warning" data-dismiss="modal">
+                                            <button type="button" class="btn btn-outline-warning" data-dismiss="modal">
                                              <i class="fa fa-window-close" aria-hidden="true"></i> Cancelar</button>
                                         </form>
                                     </div>
@@ -108,12 +108,12 @@
                                      Eliminar jornada {{ $jornada->entrada }} - {{ $jornada->salida }} 
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
+                                    <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">
                                     <i class="fa fa-ban" aria-hidden="true"></i> Cancelar </button>
                                     <form action="{{ route('admin.jornadas.destroy', $jornada->id) }}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">
+                                        <button type="submit" class="btn btn-outline-danger">
                                         <i class="fa fa-minus-circle" aria-hidden="true"></i> Eliminar </button>
                                     </form>
                                 </div>
@@ -148,10 +148,10 @@
                             <label for="salida" class="form-label">Hora de Salida</label>
                             <input type="time" class="form-control" id="salida" name="salida" required>
                         </div>
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-outline-primary">
                         <i class="fa fa-plus" aria-hidden="true"></i>Guardar</button>
 
-                        <button type="button" class="btn btn-warning" data-dismiss="modal">
+                        <button type="button" class="btn btn-outline-warning" data-dismiss="modal">
                         <i class="fa fa-window-close" aria-hidden="true"></i> Cancelar</button>
                     </form>
                 </div>

@@ -29,7 +29,7 @@ class admincontroller extends Controller
         'email' => 'required|email|max:100',
         'foto' => 'nullable|image|max:2048',
         'current_password' => 'nullable|string',
-        'new_password' => 'nullable|string|', // Se ajusta a mínimo 8 caracteres
+        'new_password' => 'nullable|string|', 
     ]);
 
     // Verifica que $admin sea una instancia del modelo Admin

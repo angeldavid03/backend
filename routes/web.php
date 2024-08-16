@@ -5,6 +5,7 @@ use App\Http\Controllers\empleadosController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\jornadascontroller;
+use App\Http\Controllers\PuestoTrabajoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +53,16 @@ Route::delete('/admin/jornadas/{id}', [JornadasController::class, 'destroy'])->n
 
 // Admins
 Route::middleware('auth')->group(function () {
-    Route::get('/admin/menu', [AdminController::class, 'showProfile'])->name('admin.menu');
-    Route::post('/admin/menu', [AdminController::class, 'updateProfile'])->name('admin.menu.update');
+    Route::get('/admin/profile', [AdminController::class, 'showProfile'])->name('admin.profile');
+    Route::post('/admin/profile', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
 });  
+
+// puestos de trabajo
+
+Route::get('/admin/categorias', [PuestoTrabajoController::class, 'index'])->name('admin.puestos.index');
+Route::post('/admin/categorias/store', [PuestoTrabajoController::class,'store'])->name('admin.puestos.store');
+Route::put('/admin/categorias/{id}', [PuestoTrabajoController::class, 'update'])->name('admin.puestos.update');
+Route::delete('/admin/categorias/{id}', [PuestoTrabajoController::class, 'destroy'])->name('admin.puestos.destroy');
+
+
+

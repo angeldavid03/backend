@@ -353,7 +353,7 @@ return [
         
         [
             'text' => 'Cargos',
-            'url' => 'admin/cargos',
+            'url' => 'admin/categorias',
             'icon' => 'fa fa-briefcase',
         ],
         [

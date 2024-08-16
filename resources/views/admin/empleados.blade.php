@@ -53,7 +53,7 @@
                  </button>
              </div>
            @endif
-           <button class="btn btn-success" data-toggle="modal" data-target="#createmodal">
+           <button class="btn btn-outline-success" data-toggle="modal" data-target="#createmodal">
             <i class="fa fa-user-plus" aria-hidden="true"></i> Agregar</button>
          <table id="empleados-table" class="table table-bordered display nowrap" cellspacing="0" width="100%" >
             <thead>
@@ -93,10 +93,10 @@
                         </td>
                         <td>{{ Carbon::parse($empleado->created_at)->format('d-m-Y') }}</td> 
                         <td>
-                        <button class="btn btn-primary editButton"  data-toggle="modal" data-target="#editmodal{{$empleado->id}}">
+                        <button class="btn btn-outline-primary editButton"  data-toggle="modal" data-target="#editmodal{{$empleado->id}}">
                         <i class="fa fa-pencil" aria-hidden="true"></i> Editar</button>
 
-                        <button type="button" class="btn btn-danger"  data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="{{$empleado->id}}" data-bs-nombre="{{ $empleado->nombre }}">
+                        <button type="button" class="btn btn-outline-danger"  data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-whatever="{{$empleado->id}}" data-bs-nombre="{{ $empleado->nombre }}">
                          <i class="fa fa-trash" aria-hidden="true"></i> Eliminar
                           </button>
                        </td>
@@ -203,8 +203,11 @@
                         <img id="preview-image-edit" src="#" alt="Preview Image" style="display: none; max-height: 150px;">
                     </div>
 
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-save" aria-hidden="true"></i> Guardar</button>
-                    <button type="button" class="btn btn-warning" data-dismiss="modal"><i class="fa fa-window-close" aria-hidden="true"></i> Cancelar</button>
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="fa fa-save" aria-hidden="true"></i> Guardar</button>
+
+                    <button type="button" class="btn btn-outline-warning" data-dismiss="modal">
+                        <i class="fa fa-window-close" aria-hidden="true"></i> Cancelar</button>
                 </form>
             </div>
         </div>
