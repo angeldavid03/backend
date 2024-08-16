@@ -9,34 +9,38 @@
 @section('content')
 <div class="container">
     @if(session('success'))
-             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                 {{ session('success') }}
-                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                 </button>
-             </div>
-           @elseif(session('info'))
-                <div class="alert alert-info alert-dismissible fade show" role="alert">
-                    {{ session('info') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @elseif(session('info'))
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            {{ session('info') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @elseif(session('warning'))
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ session('warning') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @elseif(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
 
     <button type="button" class="btn btn-outline-success mb-3" data-bs-toggle="modal" data-bs-target="#create">
         <i class="fa fa-plus"></i> Agregar
     </button>
 
-   
-
-
     
-
-    <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Puestos de Trabajo</h3>
+            
         </div>
-        <div class="card-body">
-            <table class="table table-bordered table-striped">
+        <div  class="card-body">
+            <table id="cargos-table" class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -62,7 +66,7 @@
 
                     <!--- modal para editar cargo -->
                 <div class="modal fade" id="edit{{ $puesto->id }}" tabindex="-1" aria-labelledby="editPuestoModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-lg modal-dialog-centered modal-sm">
                         <div class="modal-content">
                             <form action="{{ route('admin.puestos.update', $puesto->id) }}" method="POST">
                                 @csrf
@@ -90,8 +94,8 @@
                 </div>
 
                  <!-- Modal para crear un nuevo puesto -->
-    <div class="modal fade" id="create" tabindex="-1" aria-labelledby="createPuestoModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+      <div class="modal fade" id="create" tabindex="-1" aria-labelledby="createPuestoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-sm">
             <div class="modal-content">
                 <form action="{{ route('admin.puestos.store') }}" method="POST">
                     @csrf
@@ -115,12 +119,12 @@
                 </form>
             </div>
         </div>
-    </div>
+     </div>
 
     
                <!-- Modal para eliminar puesto -->
                 <div class="modal fade" id="delete{{ $puesto->id }}" tabindex="-1" aria-labelledby="deletePuestoModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
                         <div class="modal-content">
                             <form action="{{ route('admin.puestos.destroy', $puesto->id) }}" method="POST">
                                 @csrf
@@ -148,7 +152,7 @@
             @endforeach
             </tbody>
         </table>
-    </div>
+    
   </div>
 </div>
 @stop
@@ -159,6 +163,22 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap5.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
+<style>
+    /* Your custom styles here */
+    /* Example: */
+    table.dataTable th,
+    table.dataTable td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    .alert {
+    word-wrap: break-word; /* Permite que el texto se divida en varias líneas si es necesario */
+    max-width: 100%; /* Asegura que el mensaje no desborde su contenedor */
+    font-size: 1rem; /* Ajusta el tamaño de la fuente para mejorar la legibilidad */
+}
+
+</style>
 @stop
 
 @section('js')
@@ -174,16 +194,24 @@
 <script>
    
 
-     $(document).ready(function() {
-        // Ocultar el mensaje después de 3 segundos
-        setTimeout(function() {
-            $('.alert-success').fadeOut('slow');
-        }, 4000);
+     
 
-        new DataTable('#empleados-table', {
+        new DataTable('#cargos-table', {
             responsive: true,
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            let alertElement = document.querySelector('.alert-dismissible');
+            if (alertElement) {
+                alertElement.classList.add('fade');
+                setTimeout(function() {
+                    alertElement.remove();
+                }, 500); // tiempo para la transición
+            }
+        }, 4000); // 4000 milisegundos = 4 segundos
     });
+    
 
 
 </script>

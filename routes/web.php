@@ -63,6 +63,3 @@ Route::get('/admin/categorias', [PuestoTrabajoController::class, 'index'])->name
 Route::post('/admin/categorias/store', [PuestoTrabajoController::class,'store'])->name('admin.puestos.store');
 Route::put('/admin/categorias/{id}', [PuestoTrabajoController::class, 'update'])->name('admin.puestos.update');
 Route::delete('/admin/categorias/{id}', [PuestoTrabajoController::class, 'destroy'])->name('admin.puestos.destroy');
-
-
-
