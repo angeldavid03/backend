@@ -388,8 +388,8 @@ class ComposerStaticInit89491b667e1424a58d6b12645e994208
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -610,10 +610,9 @@ class ComposerStaticInit89491b667e1424a58d6b12645e994208
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\EmpleadosController' => __DIR__ . '/../..' . '/app/Http/Controllers/EmpleadosController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
+        'App\\Http\\Controllers\\JornadasController' => __DIR__ . '/../..' . '/app/Http/Controllers/JornadasController.php',
         'App\\Http\\Controllers\\PuestoTrabajoController' => __DIR__ . '/../..' . '/app/Http/Controllers/PuestoTrabajoController.php',
         'App\\Http\\Controllers\\admincontroller' => __DIR__ . '/../..' . '/app/Http/Controllers/admincontroller.php',
-        'App\\Http\\Controllers\\empleadoscontroller2' => __DIR__ . '/../..' . '/app/Http/Controllers/empleadoscontroller2.php',
-        'App\\Http\\Controllers\\jornadascontroller' => __DIR__ . '/../..' . '/app/Http/Controllers/jornadascontroller.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
@@ -624,11 +623,12 @@ class ComposerStaticInit89491b667e1424a58d6b12645e994208
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\ValidateSignature' => __DIR__ . '/../..' . '/app/Http/Middleware/ValidateSignature.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
+        'App\\Models\\Empleado' => __DIR__ . '/../..' . '/app/Models/Empleado.php',
+        'App\\Models\\Horario' => __DIR__ . '/../..' . '/app/Models/Horario.php',
+        'App\\Models\\Jornadas' => __DIR__ . '/../..' . '/app/Models/Jornadas.php',
         'App\\Models\\PuestoTrabajo' => __DIR__ . '/../..' . '/app/Models/PuestoTrabajo.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Models\\admin' => __DIR__ . '/../..' . '/app/Models/admin.php',
-        'App\\Models\\horario' => __DIR__ . '/../..' . '/app/Models/horario.php',
-        'App\\Models\\jornadas' => __DIR__ . '/../..' . '/app/Models/jornadas.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
