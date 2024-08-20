@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmpleadosController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\jornadascontroller;
+use App\Http\Controllers\JornadasController;
 use App\Http\Controllers\PuestoTrabajoController;
 
 /*
@@ -38,7 +38,7 @@ Route::prefix('admin')->group(function () {
 });
 
 //horarios
-Route::get('/admin/horarios', [jornadascontroller::class, 'index'])->name('admin.jornadas.index');
+Route::get('/admin/horarios', [JornadasController::class, 'index'])->name('admin.jornadas.index');
 Route::post('/admin/jornadas/store', [JornadasController::class, 'store'])->name('admin.jornadas.store');
 
 Route::get('/admin/jornadas/{id}/edit', [JornadasController::class, 'edit'])->name('admin.jornadas.edit');

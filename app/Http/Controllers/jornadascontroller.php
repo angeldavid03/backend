@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Jornadas;
 use Illuminate\Http\Request;
 
-class jornadascontroller extends Controller
+class JornadasController extends Controller
 {
     public function index()
     {
