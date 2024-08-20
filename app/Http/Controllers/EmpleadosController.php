@@ -24,7 +24,7 @@ class EmpleadosController extends Controller
         return view('admin.empleados', compact('empleados', 'puestos', 'jornadas'));
     }
 
-    public function show($id)
+    public function show($id)   
     {
         $empleado = Empleado::with('puestoTrabajo')->find($id);
         if (!$empleado) {

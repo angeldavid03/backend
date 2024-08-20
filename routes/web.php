@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\empleadosController;
+use App\Http\Controllers\EmpleadosController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\jornadascontroller;
@@ -27,14 +27,14 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::prefix('admin')->group(function () {
-    Route::get('/empleados', [empleadosController::class, 'index'])->name('admin.empleados.index');
-    Route::get('/empleados/create', [empleadosController::class, 'create'])->name('admin.create');
-    Route::post('/empleados/store', [empleadosController::class, 'store'])->name('admin.empleados.store');
-    Route::get('empleados/{id}/show', [empleadosController::class, 'show'])->name('admin.empleados.show');
-    Route::get('/empleados/{id}/edit', [empleadosController::class, 'edit'])->name('admin.edit');
-    Route::put('/empleados/{id}', [empleadosController::class, 'update'])->name('admin.empleados.update');
+    Route::get('/empleados', [EmpleadosController::class, 'index'])->name('admin.empleados.index');
+    Route::get('/empleados/create', [EmpleadosController::class, 'create'])->name('admin.create');
+    Route::post('/empleados/store', [EmpleadosController::class, 'store'])->name('admin.empleados.store');
+    Route::get('empleados/{id}/show', [EmpleadosController::class, 'show'])->name('admin.empleados.show');
+    Route::get('/empleados/{id}/edit', [EmpleadosController::class, 'edit'])->name('admin.edit');
+    Route::put('/empleados/{id}', [EmpleadosController::class, 'update'])->name('admin.empleados.update');
     Route::get('/empleados/{id}/confirmDelete', [EmpleadosController::class, 'confirmDelete'])->name('admin.empleados.confirmDelete');
-    Route::delete('/empleados/{id}/destroy', [empleadosController::class, 'destroy'])->name('admin.empleados.destroy');
+    Route::delete('/empleados/{id}/destroy', [EmpleadosController::class, 'destroy'])->name('admin.empleados.destroy');
 });
 
 //horarios
