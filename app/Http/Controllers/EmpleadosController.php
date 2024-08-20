@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Empleado;
-use App\Models\PuestoTrabajo;
-use App\Models\Jornadas;
+use app\Models\Empleado;
+use app\Models\PuestoTrabajo;
+use app\Models\Jornadas;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
