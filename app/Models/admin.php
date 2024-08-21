@@ -41,10 +41,17 @@ class admin extends Authenticatable
     public function adminlte_image()
     {
          // Detectar el tipo MIME de la imagen
-    $mimeType = mime_content_type($this->foto);
+         if ($this->foto) {
+            // Detectar el tipo MIME de la imagen
+            $finfo = new \finfo(FILEINFO_MIME_TYPE);
+            $mimeType = $finfo->buffer($this->foto);
     
-    // Devolver la imagen en base64 con el tipo MIME correcto
-    return 'data:' . $mimeType . ';base64,' . base64_encode($this->foto);
+            // Devolver la imagen en base64 con el tipo MIME correcto
+            return 'data:' . $mimeType . ';base64,' . base64_encode($this->foto);
+        } else {
+            // Si no hay una imagen, devolver una imagen por defecto (puede ser un placeholder)
+            return asset('path/to/default/image.png');
+        }
     }
 
     public function adminlte_desc()
