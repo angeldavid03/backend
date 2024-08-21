@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Carbon\Carbon;
 
-class Admin extends Authenticatable
+class admin extends Authenticatable
 {
     use HasFactory;
 
