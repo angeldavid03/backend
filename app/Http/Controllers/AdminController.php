@@ -7,7 +7,7 @@ use App\Models\admin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class admincontroller extends Controller
+class AdminController extends Controller
 {
     public function showProfile()
     {
